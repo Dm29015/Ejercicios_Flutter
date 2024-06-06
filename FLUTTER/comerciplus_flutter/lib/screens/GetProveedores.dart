@@ -1,5 +1,6 @@
-import 'package:http/http.dart' as http;
+import 'package:comerciplus_flutter/screens/PostProveedor.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import '../models/Proveedor.dart';
 import 'dart:convert';
 
@@ -24,8 +25,21 @@ class _GetProveedoresState extends State<GetProveedores> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Proveedores')),
-      body: FutureBuilder<List<Proveedor>>(
+      appBar: AppBar(title: const Text('Proveedores'),
+      actions: <Widget>[
+          ElevatedButton.icon(
+                onPressed: () {
+                  final route =
+                  MaterialPageRoute(builder: (context) => const Registrar());
+              Navigator.push(context, route);
+                },
+                icon: const Icon(Icons.add_circle_outline_sharp),
+                label:(const Text('Agregar')),
+              ),
+        ],),
+      
+      body: 
+      FutureBuilder<List<Proveedor>>(
         future: fetchProveedores(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,6 +67,7 @@ class _GetProveedoresState extends State<GetProveedores> {
                 }
 
                 return SingleChildScrollView(
+                  
                   scrollDirection: Axis.horizontal,
                   child: DataTable(
                     columns: buildDataColumns(columnasVisibles, columnasOcultas),
@@ -97,7 +112,7 @@ class _GetProveedoresState extends State<GetProveedores> {
                 onPressed: () {
                   detallesProveedor(context, proveedor, hiddenColumns);
                 },
-                child:(Text('Ver más...')),
+                child:(const Text('Ver más...')),
               ),
             ),
         ],
