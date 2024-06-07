@@ -1,4 +1,4 @@
-import 'package:comerciplus_flutter/views/menu.dart';
+import 'package:comerciplus_flutter/pages/menu.dart';
 import 'package:flutter/material.dart';
 
 void main() {

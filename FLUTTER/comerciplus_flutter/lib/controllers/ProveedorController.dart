@@ -4,7 +4,7 @@ import 'dart:convert';
 
   const String API = "http://localhost:5167/api/proveedores";
 
-// GET: Listar Proveedor
+// GET: Listar Proveedores
   Future<List<Proveedor>> fetchProveedores() async {
     final response = await http.get(Uri.parse(API));
     if (response.statusCode == 200) {
@@ -16,6 +16,16 @@ import 'dart:convert';
       throw Exception('Falló en la carga de la API');
     }
   }
+
+// GET: Listar Proveedor
+  Future<Proveedor> fetchProveedor(int id) async {
+  final response = await http.get(Uri.parse('$API/$id'));
+  if (response.statusCode == 200) {
+    return Proveedor.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Falló en la carga de la API');
+  }
+}
 
 // POST: Crear proveedor
   Future<Proveedor> createProveedor(Map proveedor) async {

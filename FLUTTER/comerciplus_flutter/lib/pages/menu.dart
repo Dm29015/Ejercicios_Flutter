@@ -1,4 +1,4 @@
-import 'package:comerciplus_flutter/views/Proveedores/ListarProveedores.dart';
+import 'package:comerciplus_flutter/pages/Proveedores/ListarProveedores.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatefulWidget {

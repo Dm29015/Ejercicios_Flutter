@@ -1,4 +1,5 @@
-import 'package:comerciplus_flutter/views/Proveedores/forms/RegistrarProveedor.dart';
+import 'package:comerciplus_flutter/pages/Proveedores/DetallesProveedor.dart';
+import 'package:comerciplus_flutter/pages/Proveedores/forms/RegistrarProveedor.dart';
 import 'package:comerciplus_flutter/widgets/Card.dart';
 import '../../controllers/ProveedorController.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,7 @@ class _ProveedoresState extends State<Proveedores> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const Registrar(),
+                         builder: (context) => Detallesproveedor(id: proveedor.id),
                       ),
                     );
                   },
