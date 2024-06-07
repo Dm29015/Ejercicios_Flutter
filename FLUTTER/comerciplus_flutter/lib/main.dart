@@ -1,4 +1,4 @@
-import 'package:comerciplus_flutter/screens/GetProveedores.dart';
+import 'package:comerciplus_flutter/views/menu.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: GetProveedores()
+      home: Menu()
     );
   }
 }

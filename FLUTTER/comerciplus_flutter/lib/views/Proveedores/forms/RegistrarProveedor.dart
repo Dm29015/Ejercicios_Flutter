@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../models/Registrar.dart';
+import '../../../controllers/ProveedorController.dart';
 
 class Registrar extends StatefulWidget {
   const Registrar({super.key});
@@ -73,7 +72,7 @@ class _RegistrarState extends State<Registrar> {
                 };
 
                 print(proveedor);
-                Http.postProveedor(proveedor);
+                createProveedor(proveedor);
               },
               icon: const Icon(Icons.new_label),
               label: const Text("Registrar"))
