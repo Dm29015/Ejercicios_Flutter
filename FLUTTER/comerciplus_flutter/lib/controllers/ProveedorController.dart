@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import '../models/Proveedor.dart';
 import 'dart:convert';
 
-  const String API = "http://localhost:5167/api/proveedores";
+  const String API = "http://deisy77-001-site1.gtempurl.com/api/proveedores";
 
 // GET: Listar Proveedores
   Future<List<Proveedor>> fetchProveedores() async {
@@ -28,7 +28,7 @@ import 'dart:convert';
 }
 
 // POST: Crear proveedor
-  Future<Proveedor> createProveedor(Map proveedor) async {
+  Future<void> createProveedor(Map proveedor) async {
     final response = await http.post(
       Uri.parse(API),
       headers: {
@@ -37,27 +37,21 @@ import 'dart:convert';
       body: json.encode(proveedor),
     );
 
-    if (response.statusCode == 200) {//Si la respuesta es 200 la inserción es exitosa
-      var data = jsonDecode(response.body.toString());
-      print(data);
-      return data;
-    } else {
-      print(response.statusCode);
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception('Error al crear proveedor');
     }
   }
 
 // DELETE : Eliminar
   Future<void> deleteProveedor(int id) async {
-    final response = await http.delete(
-      Uri.parse('$API/$id'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+  final response = await http.delete(
+    Uri.parse('$API/$id'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+  );
 
-    if (response.statusCode != 200) {
+  if (response.statusCode != 200 && response.statusCode != 204) {
       throw Exception('Error al eliminar proveedor');
     }
-  }
-
+}

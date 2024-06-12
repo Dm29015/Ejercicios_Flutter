@@ -1,9 +1,9 @@
-import 'package:comerciplus_flutter/pages/Proveedores/DetallesProveedor.dart';
-import 'package:comerciplus_flutter/pages/Proveedores/forms/RegistrarProveedor.dart';
-import 'package:comerciplus_flutter/widgets/Card.dart';
-import '../../controllers/ProveedorController.dart';
 import 'package:flutter/material.dart';
+import '../../controllers/ProveedorController.dart';
 import '../../models/Proveedor.dart';
+import 'DetallesProveedor.dart';
+import 'forms/RegistrarProveedor.dart';
+import '../../widgets/Card.dart';
 
 class Proveedores extends StatefulWidget {
   const Proveedores({super.key});
@@ -13,16 +13,35 @@ class Proveedores extends StatefulWidget {
 }
 
 class _ProveedoresState extends State<Proveedores> {
+  late Future<List<Proveedor>> _futureProveedores;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureProveedores = fetchProveedores();
+  }
+
+  void _refreshProveedores() {
+    setState(() {
+      _futureProveedores = fetchProveedores();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 42, 54, 68),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 42, 54, 68),
-        title: const Text('Proveedores', style: TextStyle(color:Color.fromRGBO(255, 213, 79, 1),),),
+        title: const Text(
+          'Proveedores',
+          style: TextStyle(
+            color: Color.fromRGBO(255, 213, 79, 1),
+          ),
+        ),
       ),
       body: FutureBuilder<List<Proveedor>>(
-        future: fetchProveedores(),
+        future: _futureProveedores,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -40,17 +59,20 @@ class _ProveedoresState extends State<Proveedores> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                         builder: (context) => Detallesproveedor(id: proveedor.id),
+                        builder: (context) =>
+                            DetallesProveedor(id: proveedor.id),
                       ),
-                    );
+                    ).then((_) {
+                      _refreshProveedores();
+                    });
                   },
-                child: Container(
-                  padding: const EdgeInsets.all(10.0),
-                  child: CardWidget(
-                        colorIcon: const Color.fromARGB(255, 252, 232, 54),
-                        proveedor: proveedor.nombreProveedor,
-                      ),
-                )
+                  child: Container(
+                    padding: const EdgeInsets.all(10.0),
+                    child: CardWidget(
+                      colorIcon: const Color.fromARGB(255, 252, 232, 54),
+                      proveedor: proveedor.nombreProveedor,
+                    ),
+                  ),
                 );
               },
             );
@@ -58,10 +80,11 @@ class _ProveedoresState extends State<Proveedores> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           final route =
               MaterialPageRoute(builder: (context) => const Registrar());
-          Navigator.push(context, route);
+          await Navigator.push(context, route);
+          _refreshProveedores();
         },
         backgroundColor: Colors.yellow,
         child: const Icon(Icons.add),
