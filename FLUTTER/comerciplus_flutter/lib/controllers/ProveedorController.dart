@@ -42,6 +42,22 @@ import 'dart:convert';
     }
   }
 
+  // PUT: Actualizar proveedor
+Future<void> updateProveedor(int id, Map proveedor) async {
+  final response = await http.put(
+    Uri.parse('$API/$id'),
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: json.encode(proveedor),
+  );
+
+  if (response.statusCode != 200 && response.statusCode != 201) {
+    throw Exception('Error al actualizar proveedor');
+  }
+}
+
+
 // DELETE : Eliminar
   Future<void> deleteProveedor(int id) async {
   final response = await http.delete(
@@ -55,3 +71,7 @@ import 'dart:convert';
       throw Exception('Error al eliminar proveedor');
     }
 }
+
+
+
+

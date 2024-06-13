@@ -16,19 +16,6 @@ const listarDelitos = async (req, res = response) => {
     }
 }
 
-// GET BUSCAR DELITOS
-const buscarDelitos = async (req, res) => {
-    const searchTerm = req.query.q;
-
-    try {
-        const { data } = await axios.get(`${API}?campo_de_busqueda=${searchTerm}`);
-        res.json(data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error al buscar delitos' });
-    }
-}
-
 module.exports = {
     listarDelitos,
     buscarDelitos

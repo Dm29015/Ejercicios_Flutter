@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../../controllers/ProveedorController.dart';
 
-class Registrar extends StatefulWidget {
-  const Registrar({super.key});
+class Editar extends StatefulWidget {
+  final int id;
+  const Editar({super.key, required this.id});
 
   @override
-  State<Registrar> createState() => _RegistrarState();
+  State<Editar> createState() => _EditarState();
 }
 
-class _RegistrarState extends State<Registrar> {
+class _EditarState extends State<Editar> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController nit = TextEditingController();
   TextEditingController nombreProveedor = TextEditingController();
@@ -17,13 +18,36 @@ class _RegistrarState extends State<Registrar> {
   TextEditingController nombreVendedor = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    cargarDatosProveedor();
+  }
+
+  void cargarDatosProveedor() async {
+    try {
+      // Obtener los datos del proveedor usando el ID proporcionado
+      var proveedor = await fetchProveedor(widget.id);
+
+      setState(() {
+        nit.text = proveedor.nit;
+        nombreProveedor.text = proveedor.nombreProveedor;
+        telefonoProveedor.text = proveedor.telefonoProveedor;
+        direccionProveedor.text = proveedor.direccionProveedor;
+        nombreVendedor.text = proveedor.nombreVendedor;
+      });
+    } catch (e) {
+      print('Error al cargar los datos del proveedor: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 42, 54, 68),
         iconTheme: const IconThemeData(color: Color.fromRGBO(255, 213, 79, 1)),
         title: const Text(
-          'Registrar proveedor',
+          'Editar proveedor',
           style: TextStyle(color: Color.fromRGBO(255, 213, 79, 1)),
         ),
       ),
@@ -138,7 +162,8 @@ class _RegistrarState extends State<Registrar> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    var proveedor = {
+                    var proveedorEdit = {
+                      "id" : widget.id,
                       "nit": nit.text,
                       "nombreEmpresa": nombreProveedor.text,
                       "direccionEmpresa": direccionProveedor.text,
@@ -147,24 +172,21 @@ class _RegistrarState extends State<Registrar> {
                     };
 
                     try {
-                      await createProveedor(proveedor);
+                      updateProveedor(widget.id, proveedorEdit);
 
-                      // Mostrar la alerta de éxito
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('¡Proveedor agregado con éxito!'),
+                          content: Text('¡Proveedor editado con éxito!'),
                           duration: Duration(seconds: 2),
                           backgroundColor: Colors.green,
                         ),
                       );
 
-                      // Volver a la página de listar proveedores y refrescar la lista
                       Navigator.pop(context);
                     } catch (e) {
-                      // Mostrar la alerta de error
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Error al agregar el proveedor.'),
+                          content: Text('Error al editar el proveedor.'),
                           duration: Duration(seconds: 2),
                           backgroundColor: Colors.red,
                         ),
@@ -175,7 +197,7 @@ class _RegistrarState extends State<Registrar> {
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromRGBO(255, 213, 79, 1)),
                 child: const Text(
-                  'Registrar',
+                  'Editar',
                   style: TextStyle(color: Color.fromARGB(255, 42, 54, 68)),
                 ),
               ),

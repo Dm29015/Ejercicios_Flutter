@@ -1,3 +1,4 @@
+import 'package:comerciplus_flutter/pages/Proveedores/forms/EditarProveedor.dart';
 import 'package:flutter/material.dart';
 import '../../controllers/ProveedorController.dart';
 import '../../models/Proveedor.dart';
@@ -13,27 +14,29 @@ class DetallesProveedor extends StatefulWidget {
 }
 
 class _DetallesProveedorState extends State<DetallesProveedor> {
+  late Proveedor proveedor;
+  
   Future<void> _eliminarProveedor(BuildContext context, int id) async {
-  try {
-    await deleteProveedor(id);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('¡Proveedor eliminado con éxito!'),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.green,
-      ),
-    );
-    Navigator.of(context).pop();
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Error al eliminar el proveedor.'),
-        duration: Duration(seconds: 2),
-        backgroundColor: Colors.red,
-      ),
-    );
+    try {
+      await deleteProveedor(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('¡Proveedor eliminado con éxito!'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error al eliminar el proveedor.'),
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +49,12 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.lightBlueAccent),
             onPressed: () {
-              // Acción de editar
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Editar(id: widget.id),
+                ),
+              );
             },
           ),
           IconButton(
@@ -70,7 +78,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                         child: const Text('Eliminar'),
                         onPressed: () async {
                           Navigator.of(context).pop();
-                           _eliminarProveedor(context, widget.id);
+                          _eliminarProveedor(context, widget.id);
                           Navigator.of(context).pop();
                         },
                       ),
@@ -83,8 +91,8 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
         ],
       ),
       body: Builder(
-      builder: (context) {
-        return FutureBuilder<Proveedor>(
+        builder: (context) {
+          return FutureBuilder<Proveedor>(
             future: fetchProveedor(widget.id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

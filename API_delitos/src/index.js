@@ -30,6 +30,7 @@ class Server{
         this.app.listen(this.port, () => {
             console.log(`http://localhost:${this.port}`);
         })
+        // this.app.listen(this.API, () => {})
     }
     
 
