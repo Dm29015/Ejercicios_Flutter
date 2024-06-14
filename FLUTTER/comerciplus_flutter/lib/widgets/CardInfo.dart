@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 
 class CardW extends StatelessWidget {
-  final String proveedor;
+  final String nombre;
 
-  const CardW({super.key, required this.proveedor});
+  const CardW({super.key, required this.nombre});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class CardW extends StatelessWidget {
           const Icon(Icons.business, color: Colors.amber, size: 40),
           const SizedBox(width: 10.0),
           Text(
-            proveedor,
+            nombre,
             style: const TextStyle(
                 color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
           ),

@@ -1,3 +1,4 @@
+import 'package:comerciplus_flutter/pages/Clientes/ListarClientes.dart';
 import 'package:comerciplus_flutter/pages/Proveedores/ListarProveedores.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _MenuState extends State<Menu> {
         child: selectedIndex == 0
             ? const Proveedores()
             : selectedIndex == 1
-                ? const Proveedores()
+                ? const Clientes()
                     : Container(), // Opción por defecto
       ),
       bottomNavigationBar: BottomNavigationBar(

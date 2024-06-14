@@ -1,27 +1,27 @@
-import 'package:comerciplus_flutter/pages/Proveedores/forms/EditarProveedor.dart';
+import 'package:comerciplus_flutter/pages/Clientes/forms/EditarCliente.dart';
 import 'package:flutter/material.dart';
-import '../../controllers/ProveedorController.dart';
-import '../../models/Proveedor.dart';
+import '../../controllers/ClienteController.dart';
+import '../../models/Cliente.dart';
 import '../../widgets/CardInfo.dart';
 
-class DetallesProveedor extends StatefulWidget {
+class DetallesCliente extends StatefulWidget {
   final int id;
 
-  const DetallesProveedor({super.key, required this.id});
+  const DetallesCliente({super.key, required this.id});
 
   @override
-  State<DetallesProveedor> createState() => _DetallesProveedorState();
+  State<DetallesCliente> createState() => _DetallesClienteState();
 }
 
-class _DetallesProveedorState extends State<DetallesProveedor> {
-  late Proveedor proveedor;
+class _DetallesClienteState extends State<DetallesCliente> {
+  late Cliente cliente;
   
-  Future<void> _eliminarProveedor(BuildContext context, int id) async {
+  Future<void> _eliminarCliente(BuildContext context, int id) async {
     try {
-      await deleteProveedor(id);
+      await deleteCliente(id);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('¡Proveedor eliminado con éxito!'),
+          content: Text('¡Cliente eliminado con éxito!'),
           duration: Duration(seconds: 2),
           backgroundColor: Colors.green,
         ),
@@ -30,7 +30,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Error al eliminar el proveedor.'),
+          content: Text('Error al eliminar el Cliente.'),
           duration: Duration(seconds: 2),
           backgroundColor: Colors.red,
         ),
@@ -52,7 +52,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Editar(id: widget.id),
+                  builder: (context) => EditarCliente(id: widget.id),
                 ),
               );
             },
@@ -66,7 +66,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                   return AlertDialog(
                     title: const Text('Confirmar Eliminación'),
                     content: const Text(
-                        '¿Estás seguro de que deseas eliminar este proveedor?'),
+                        '¿Estás seguro de que deseas eliminar este Cliente?'),
                     actions: <Widget>[
                       TextButton(
                         child: const Text('Cancelar'),
@@ -78,7 +78,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                         child: const Text('Eliminar'),
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          _eliminarProveedor(context, widget.id);
+                          _eliminarCliente(context, widget.id);
                           Navigator.of(context).pop();
                         },
                       ),
@@ -92,8 +92,8 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
       ),
       body: Builder(
         builder: (context) {
-          return FutureBuilder<Proveedor>(
-            future: fetchProveedor(widget.id),
+          return FutureBuilder<Cliente>(
+            future: fetchCliente(widget.id),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -107,16 +107,16 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
               } else if (!snapshot.hasData) {
                 return const Center(
                   child: Text(
-                    'Proveedor no encontrado',
+                    'Cliente no encontrado',
                     style: TextStyle(color: Colors.white),
                   ),
                 );
               } else {
-                var proveedor = snapshot.data!;
+                var cliente = snapshot.data!;
                 return ListView(
                   padding: const EdgeInsets.all(15.0),
                   children: [
-                    CardW(nombre: proveedor.nombreProveedor),
+                    CardW(nombre: '${cliente.nombreCliente} ${cliente.apellidoCliente}'),
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -129,7 +129,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                           children: [
                             const SizedBox(width: 10),
                             const Text(
-                              'Información sobre la empresa',
+                              'Información personal',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
@@ -140,7 +140,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15.0),
                               child: CardInfo(
-                                dato: proveedor.nit,
+                                dato: cliente.cedulaCliente,
                                 icono: Icons.assignment_ind_outlined,
                                 colorIcono:
                                     const Color.fromARGB(188, 255, 7, 201),
@@ -149,15 +149,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15.0),
                               child: CardInfo(
-                                dato: proveedor.nombreVendedor,
-                                icono: Icons.email_outlined,
-                                colorIcono: Colors.blue,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 15.0),
-                              child: CardInfo(
-                                dato: proveedor.telefonoProveedor,
+                                dato: cliente.telefonoCliente,
                                 icono: Icons.phone_android_rounded,
                                 colorIcono: Colors.green,
                               ),
@@ -165,7 +157,7 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
                             Padding(
                               padding: const EdgeInsets.only(bottom: 15.0),
                               child: CardInfo(
-                                dato: proveedor.direccionProveedor,
+                                dato: cliente.direccionCliente,
                                 icono: Icons.location_on_outlined,
                                 colorIcono: Colors.pink,
                               ),

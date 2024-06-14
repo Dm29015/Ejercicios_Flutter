@@ -1,29 +1,29 @@
+import 'package:comerciplus_flutter/pages/Clientes/DetallesCliente.dart';
+import 'package:comerciplus_flutter/pages/Clientes/forms/RegistrarCliente.dart';
 import 'package:flutter/material.dart';
-import '../../controllers/ProveedorController.dart';
-import '../../models/Proveedor.dart';
-import 'DetallesProveedor.dart';
-import 'forms/RegistrarProveedor.dart';
-import '../../widgets/CardProveedores.dart';
+import '../../controllers/ClienteController.dart';
+import '../../models/Cliente.dart';
+import '../../widgets/CardClientes.dart';
 
-class Proveedores extends StatefulWidget {
-  const Proveedores({super.key});
+class Clientes extends StatefulWidget {
+  const Clientes({super.key});
 
   @override
-  State<Proveedores> createState() => _ProveedoresState();
+  State<Clientes> createState() => _ClientesState();
 }
 
-class _ProveedoresState extends State<Proveedores> {
-  late Future<List<Proveedor>> _futureProveedores;
+class _ClientesState extends State<Clientes> {
+  late Future<List<Cliente>> _futureClientes;
 
   @override
   void initState() {
     super.initState();
-    _futureProveedores = fetchProveedores();
+    _refreshClientes();
   }
 
-  void _refreshProveedores() {
+  void _refreshClientes() {
     setState(() {
-      _futureProveedores = fetchProveedores();
+      _futureClientes = fetchClientes();
     });
   }
 
@@ -34,47 +34,44 @@ class _ProveedoresState extends State<Proveedores> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 42, 54, 68),
         title: const Text(
-          'Proveedores',
+          'Clientes',
           style: TextStyle(
             color: Color.fromRGBO(255, 213, 79, 1),
           ),
         ),
       ),
-      body: FutureBuilder<List<Proveedor>>(
-        future: _futureProveedores,
+      body: FutureBuilder<List<Cliente>>(
+        future: _futureClientes,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Proveedores no encontrados'));
+            return const Center(child: Text('Clientes no encontrados'));
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                var proveedor = snapshot.data![index];
+                var cliente = snapshot.data![index];
                 return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            DetallesProveedor(id: proveedor.id),
+                        builder: (context) => DetallesCliente(id: cliente.id),
                       ),
                     ).then((_) {
-                      _refreshProveedores();
+                      _refreshClientes();
                     });
                   },
-
                   child: Container(
-                    padding: const EdgeInsets.all(10.0),
-                    child: CardWidget(
-                      colorIcon: const Color.fromARGB(255, 252, 232, 54),
-                      proveedor: proveedor.nombreProveedor,
-                    ),
-                  ),
-
+                      padding: const EdgeInsets.all(10.0),
+                      child: CardCliente(
+                          colorIcon: const Color.fromARGB(255, 252, 232, 54),
+                          nombreCliente: cliente.nombreCliente,
+                          apellidoCliente: cliente.apellidoCliente,
+                          telefonoCliente: cliente.telefonoCliente)),
                 );
               },
             );
@@ -84,9 +81,9 @@ class _ProveedoresState extends State<Proveedores> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final route =
-              MaterialPageRoute(builder: (context) => const Registrar());
+              MaterialPageRoute(builder: (context) => const RegistrarCliente());
           await Navigator.push(context, route);
-          _refreshProveedores();
+          _refreshClientes();
         },
         backgroundColor: Colors.yellow,
         child: const Icon(Icons.add),
