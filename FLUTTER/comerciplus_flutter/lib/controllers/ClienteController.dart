@@ -52,7 +52,7 @@ Future<void> updateCliente(int id, Map Cliente) async {
     body: json.encode(Cliente),
   );
 
-  if (response.statusCode != 200 && response.statusCode != 201) {
+  if (response.statusCode != 200 && response.statusCode != 204) {
     throw Exception('Error al actualizar Cliente');
   }
 }

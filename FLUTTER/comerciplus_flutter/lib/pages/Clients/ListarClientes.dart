@@ -1,5 +1,5 @@
-import 'package:comerciplus_flutter/pages/Clientes/DetallesCliente.dart';
-import 'package:comerciplus_flutter/pages/Clientes/forms/RegistrarCliente.dart';
+import 'package:comerciplus_flutter/pages/Clients/DetallesCliente.dart';
+import 'package:comerciplus_flutter/pages/Clients/forms/RegistrarCliente.dart';
 import 'package:flutter/material.dart';
 import '../../controllers/ClienteController.dart';
 import '../../models/Cliente.dart';

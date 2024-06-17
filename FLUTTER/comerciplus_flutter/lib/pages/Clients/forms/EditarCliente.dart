@@ -1,6 +1,5 @@
 import 'package:comerciplus_flutter/controllers/ClienteController.dart';
 import 'package:flutter/material.dart';
-import '../../../controllers/ProveedorController.dart';
 
 class EditarCliente extends StatefulWidget {
   final int id;
@@ -21,12 +20,11 @@ class _EditarClienteState extends State<EditarCliente> {
   @override
   void initState() {
     super.initState();
-    cargarDatosProveedor();
+    cargarDatosCliente();
   }
 
-  void cargarDatosProveedor() async {
+  void cargarDatosCliente() async {
     try {
-      // Obtener los datos del proveedor usando el ID proporcionado
       var cliente = await fetchCliente(widget.id);
 
       setState(() {
@@ -35,9 +33,11 @@ class _EditarClienteState extends State<EditarCliente> {
         apellidoCliente.text = cliente.apellidoCliente;
         direccionCliente.text = cliente.direccionCliente;
         telefonoCliente.text = cliente.telefonoCliente;
+        
       });
+
     } catch (e) {
-      print('Error al cargar los datos del proveedor: $e');
+      throw Exception('Error al editar el cliente');
     }
   }
 
@@ -48,7 +48,7 @@ class _EditarClienteState extends State<EditarCliente> {
         backgroundColor: const Color.fromARGB(255, 42, 54, 68),
         iconTheme: const IconThemeData(color: Color.fromRGBO(255, 213, 79, 1)),
         title: const Text(
-          'Editar proveedor',
+          'Editar cliente',
           style: TextStyle(color: Color.fromRGBO(255, 213, 79, 1)),
         ),
       ),
@@ -69,7 +69,7 @@ class _EditarClienteState extends State<EditarCliente> {
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.credit_card,
+                  prefixIcon: Icon(Icons.assignment_ind_outlined,
                       color: Color.fromRGBO(255, 214, 79, 0.644)),
                 ),
                 validator: (value) {
@@ -90,7 +90,7 @@ class _EditarClienteState extends State<EditarCliente> {
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.business,
+                  prefixIcon: Icon(Icons.person,
                       color: Color.fromRGBO(255, 214, 79, 0.644)),
                 ),
                 validator: (value) {
@@ -110,7 +110,7 @@ class _EditarClienteState extends State<EditarCliente> {
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.business,
+                  prefixIcon: Icon(Icons.person,
                       color: Color.fromRGBO(255, 214, 79, 0.644)),
                 ),
                 validator: (value) {
@@ -164,7 +164,7 @@ class _EditarClienteState extends State<EditarCliente> {
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    var proveedorEdit = {
+                    var clienteEdit = {
                       "id": widget.id,
                       "cedulaCliente": cedulaCliente.text,
                       "nombreCliente": nombreCliente.text,
@@ -175,7 +175,7 @@ class _EditarClienteState extends State<EditarCliente> {
                     };
 
                     try {
-                      updateProveedor(widget.id, proveedorEdit);
+                      await updateCliente(widget.id, clienteEdit);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -185,7 +185,7 @@ class _EditarClienteState extends State<EditarCliente> {
                         ),
                       );
 
-                      Navigator.pop(context);
+                      Navigator.pop(context); 
                     } catch (e) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

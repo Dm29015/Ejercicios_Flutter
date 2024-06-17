@@ -6,7 +6,7 @@
   final String apellidoCliente;
   final String direccionCliente;
   final String telefonoCliente;
-  final String estadoCliente;
+  final bool estadoCliente;
 
   Cliente({required this.id, required this.cedulaCliente,required this.nombreCliente, required this.apellidoCliente,required this.direccionCliente, required this.telefonoCliente, required this.estadoCliente });
 

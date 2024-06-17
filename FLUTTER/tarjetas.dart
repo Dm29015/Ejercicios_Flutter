@@ -1,17 +1,14 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 
-class CardCliente extends StatelessWidget {
-  final String nombreCliente,apellidoCliente, telefonoCliente;
+// TARJETA CON BOTON DE EDITAR Y ELIMINAR
+class CardWidget extends StatelessWidget {
+  final String proveedor;
   final Color colorIcon;
 
-  const CardCliente({
+  const CardWidget({
     super.key,
     required this.colorIcon,
-    required this.nombreCliente,
-    required this.apellidoCliente,
-    required this.telefonoCliente
+    required this.proveedor
   });
 
   @override
@@ -34,24 +31,37 @@ class CardCliente extends StatelessWidget {
             child: const Icon(Icons.business, color: Color.fromARGB(255, 42, 54, 68)),
           ),
           const SizedBox(width: 20.0),
-    
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '$nombreCliente $apellidoCliente',
+                  proveedor,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
-                  maxLines: 2, // Limita el número máximo de líneas a 2
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis, // Muestra puntos suspensivos si el texto se desborda
-                ),
-                const SizedBox(height: 7.0),
-                Text(
-                  telefonoCliente,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13)
-                ),
+                )
               ],
             ),
+          ),
+
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.edit, color: Colors.white),
+                onPressed: () {
+                  // Acción para editar
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.delete, color: Colors.white),
+                onPressed: () {
+                  // Acción para eliminar
+                },
+              ),
+            ],
           ),
         ],
       ),
@@ -59,3 +69,4 @@ class CardCliente extends StatelessWidget {
   }
 }
 
+// 

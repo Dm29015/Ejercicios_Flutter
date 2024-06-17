@@ -1,16 +1,13 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 
 class CardWidget extends StatelessWidget {
-  final String proveedor; //fecha;
+  final String proveedor;
   final Color colorIcon;
 
   const CardWidget({
     super.key,
     required this.colorIcon,
-    required this.proveedor,
-    //required this.fecha,
+    required this.proveedor
   });
 
   @override
@@ -41,16 +38,9 @@ class CardWidget extends StatelessWidget {
                 Text(
                   proveedor,
                   style: const TextStyle(color: Colors.white, fontSize: 16),
-                  maxLines: 2, // Limita el número máximo de líneas a 2
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis, // Muestra puntos suspensivos si el texto se desborda
-                ),
-                // const SizedBox(height: 7.0),
-                // Text(
-                //   fecha,
-                //   style: const TextStyle(color: Colors.grey, fontSize: 15),
-                //   maxLines: 3, // Limita el número máximo de líneas a 3
-                //   overflow: TextOverflow.ellipsis, // Muestra puntos suspensivos si el texto se desborda
-                // ),
+                )
               ],
             ),
           ),

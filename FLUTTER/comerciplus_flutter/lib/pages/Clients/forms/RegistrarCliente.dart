@@ -42,10 +42,12 @@ class _RegistrarClienteState extends State<RegistrarCliente> {
                 style:
                     const TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                 decoration: const InputDecoration(
-                  labelText: 'Cedula Cliente',
+                  labelText: 'Cédula',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.assignment_ind_outlined,
+                        color: Color.fromRGBO(255, 214, 79, 0.644))
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -60,11 +62,12 @@ class _RegistrarClienteState extends State<RegistrarCliente> {
                 style:
                     const TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                 decoration: const InputDecoration(
-                  labelText: 'Nombre Cliente',
-                  labelStyle:
-                      TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
-                  border: OutlineInputBorder(),
-                ),
+                    labelText: 'Nombre',
+                    labelStyle:
+                        TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person,
+                        color: Color.fromRGBO(255, 214, 79, 0.644))),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Por favor ingrese el nombre del cliente';
@@ -78,10 +81,12 @@ class _RegistrarClienteState extends State<RegistrarCliente> {
                 style:
                     const TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                 decoration: const InputDecoration(
-                  labelText: 'Apellido Cliente',
+                  labelText: 'Apellido',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.person,
+                      color: Color.fromRGBO(255, 214, 79, 0.644))
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -96,10 +101,12 @@ class _RegistrarClienteState extends State<RegistrarCliente> {
                 style:
                     const TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                 decoration: const InputDecoration(
-                  labelText: 'Dirección Cliente',
+                  labelText: 'Dirección',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.location_on,
+                      color: Color.fromRGBO(255, 214, 79, 0.644))
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -114,10 +121,12 @@ class _RegistrarClienteState extends State<RegistrarCliente> {
                 style:
                     const TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                 decoration: const InputDecoration(
-                  labelText: 'Teléfono Cliente',
+                  labelText: 'Teléfono',
                   labelStyle:
                       TextStyle(color: Color.fromARGB(234, 255, 255, 255)),
                   border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.phone,
+                      color: Color.fromRGBO(255, 214, 79, 0.644))
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -152,7 +161,6 @@ class _RegistrarClienteState extends State<RegistrarCliente> {
 
                       Navigator.pop(context);
                     } catch (e) {
-
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Error al agregar el cliente.'),

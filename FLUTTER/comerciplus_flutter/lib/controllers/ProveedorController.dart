@@ -52,7 +52,8 @@ Future<void> updateProveedor(int id, Map proveedor) async {
     body: json.encode(proveedor),
   );
 
-  if (response.statusCode != 200 && response.statusCode != 201) {
+   if (response.statusCode != 200 && response.statusCode != 204) {
+    print(response.statusCode);
     throw Exception('Error al actualizar proveedor');
   }
 }
@@ -68,6 +69,7 @@ Future<void> updateProveedor(int id, Map proveedor) async {
   );
 
   if (response.statusCode != 200 && response.statusCode != 204) {
+    print(response.statusCode);
       throw Exception('Error al eliminar proveedor');
     }
 }

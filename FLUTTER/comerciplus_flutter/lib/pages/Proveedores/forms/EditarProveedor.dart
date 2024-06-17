@@ -36,7 +36,7 @@ class _EditarState extends State<Editar> {
         nombreVendedor.text = proveedor.nombreVendedor;
       });
     } catch (e) {
-      print('Error al cargar los datos del proveedor: $e');
+      throw Exception('Error al cargar los datos del proveedor');
     }
   }
 
@@ -163,7 +163,7 @@ class _EditarState extends State<Editar> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     var proveedorEdit = {
-                      "id" : widget.id,
+                      "id": widget.id,
                       "nit": nit.text,
                       "nombreEmpresa": nombreProveedor.text,
                       "direccionEmpresa": direccionProveedor.text,
@@ -172,7 +172,7 @@ class _EditarState extends State<Editar> {
                     };
 
                     try {
-                      updateProveedor(widget.id, proveedorEdit);
+                      await updateProveedor(widget.id, proveedorEdit);
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

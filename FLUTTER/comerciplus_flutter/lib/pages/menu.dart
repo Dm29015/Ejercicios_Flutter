@@ -1,4 +1,4 @@
-import 'package:comerciplus_flutter/pages/Clientes/ListarClientes.dart';
+import 'package:comerciplus_flutter/pages/Clients/ListarClientes.dart';
 import 'package:comerciplus_flutter/pages/Proveedores/ListarProveedores.dart';
 import 'package:flutter/material.dart';
 

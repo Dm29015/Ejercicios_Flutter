@@ -1,4 +1,5 @@
-import 'package:comerciplus_flutter/pages/Clientes/forms/EditarCliente.dart';
+import 'package:comerciplus_flutter/pages/Clients/ListarClientes.dart';
+import 'package:comerciplus_flutter/pages/Clients/forms/EditarCliente.dart';
 import 'package:flutter/material.dart';
 import '../../controllers/ClienteController.dart';
 import '../../models/Cliente.dart';
@@ -15,27 +16,66 @@ class DetallesCliente extends StatefulWidget {
 
 class _DetallesClienteState extends State<DetallesCliente> {
   late Cliente cliente;
-  
+  late Future<Cliente> _futureCliente;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshCliente();
+  }
+
+  void _refreshCliente() {
+    setState(() {
+      _futureCliente = fetchCliente(widget.id);
+    });
+  }
+
   Future<void> _eliminarCliente(BuildContext context, int id) async {
-    try {
-      await deleteCliente(id);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('¡Cliente eliminado con éxito!'),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.of(context).pop();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Error al eliminar el Cliente.'),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Eliminación'),
+          content:
+              const Text('¿Estás seguro de que deseas eliminar este Cliente?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Eliminar'),
+              onPressed: () async {
+                try {
+                  await deleteCliente(id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('¡Cliente eliminado con éxito!'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                  final route = MaterialPageRoute(
+                      builder: (context) => const Clientes());
+                  await Navigator.push(context, route);
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error al eliminar el Cliente.'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -48,44 +88,18 @@ class _DetallesClienteState extends State<DetallesCliente> {
         actions: [
           IconButton(
             icon: const Icon(Icons.edit, color: Colors.lightBlueAccent),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditarCliente(id: widget.id),
-                ),
-              );
+            onPressed: () async {
+              final route = MaterialPageRoute(
+                  builder: (context) => EditarCliente(id: widget.id));
+              await Navigator.push(context, route);
+              _refreshCliente();
             },
           ),
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Confirmar Eliminación'),
-                    content: const Text(
-                        '¿Estás seguro de que deseas eliminar este Cliente?'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Cancelar'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      TextButton(
-                        child: const Text('Eliminar'),
-                        onPressed: () async {
-                          Navigator.of(context).pop();
-                          _eliminarCliente(context, widget.id);
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
+              _eliminarCliente(context, widget.id);
+              Navigator.of(context);
             },
           ),
         ],
@@ -93,7 +107,7 @@ class _DetallesClienteState extends State<DetallesCliente> {
       body: Builder(
         builder: (context) {
           return FutureBuilder<Cliente>(
-            future: fetchCliente(widget.id),
+            future: _futureCliente,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -116,7 +130,9 @@ class _DetallesClienteState extends State<DetallesCliente> {
                 return ListView(
                   padding: const EdgeInsets.all(15.0),
                   children: [
-                    CardW(nombre: '${cliente.nombreCliente} ${cliente.apellidoCliente}'),
+                    CardW(
+                        nombre:
+                            '${cliente.nombreCliente} ${cliente.apellidoCliente}'),
                     Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
