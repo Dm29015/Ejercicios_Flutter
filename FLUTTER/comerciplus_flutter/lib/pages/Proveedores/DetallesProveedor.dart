@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../controllers/ProveedorController.dart';
 import '../../models/Proveedor.dart';
 import '../../widgets/CardInfo.dart';
-import '../menu.dart';
 
 class DetallesProveedor extends StatefulWidget {
   final int id;
