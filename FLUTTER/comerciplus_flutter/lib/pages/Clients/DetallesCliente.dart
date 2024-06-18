@@ -1,5 +1,5 @@
-import 'package:comerciplus_flutter/pages/Clients/ListarClientes.dart';
 import 'package:comerciplus_flutter/pages/Clients/forms/EditarCliente.dart';
+
 import 'package:flutter/material.dart';
 import '../../controllers/ClienteController.dart';
 import '../../models/Cliente.dart';
@@ -57,10 +57,8 @@ class _DetallesClienteState extends State<DetallesCliente> {
                       backgroundColor: Colors.green,
                     ),
                   );
-                  Navigator.of(context).pop();
-                  final route = MaterialPageRoute(
-                      builder: (context) => const Clientes());
-                  await Navigator.push(context, route);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

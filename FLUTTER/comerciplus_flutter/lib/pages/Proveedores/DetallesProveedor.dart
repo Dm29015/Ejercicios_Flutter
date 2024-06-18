@@ -1,9 +1,10 @@
-import 'package:comerciplus_flutter/pages/Proveedores/ListarProveedores.dart';
+
 import 'package:comerciplus_flutter/pages/Proveedores/forms/EditarProveedor.dart';
 import 'package:flutter/material.dart';
 import '../../controllers/ProveedorController.dart';
 import '../../models/Proveedor.dart';
 import '../../widgets/CardInfo.dart';
+import '../menu.dart';
 
 class DetallesProveedor extends StatefulWidget {
   final int id;
@@ -31,53 +32,51 @@ class _DetallesProveedorState extends State<DetallesProveedor> {
     });
   }
 
-  Future<void> _eliminarProveedor(BuildContext context, int id) async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirmar Eliminación'),
-          content: const Text(
-              '¿Estás seguro de que deseas eliminar este proveedor?'),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancelar'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Eliminar'),
-              onPressed: () async {
-                try {
-                  await deleteProveedor(id);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('¡Proveedor eliminado con éxito!'),
-                      duration: Duration(seconds: 2),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                  Navigator.of(context).pop();
-                  final route = MaterialPageRoute(
-                      builder: (context) => const Proveedores());
-                  await Navigator.push(context, route);
-                } catch (e) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Error al eliminar el proveedor.'),
-                      duration: Duration(seconds: 2),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+ Future<void> _eliminarProveedor(BuildContext context, int id) async {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirmar Eliminación'),
+        content: const Text('¿Estás seguro de que deseas eliminar este proveedor?'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancelar'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Eliminar'),
+            onPressed: () async {
+              try {
+                await deleteProveedor(id);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('¡Proveedor eliminado con éxito!'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                Navigator.pop(context);
+                Navigator.pop(context);
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Error al eliminar el proveedor.'),
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {

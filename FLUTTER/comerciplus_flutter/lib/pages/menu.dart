@@ -20,11 +20,9 @@ class _MenuState extends State<Menu> {
         case 0:
           contenido = 'Proveedores';
           break;
-
         case 1:
           contenido = 'Clientes';
           break;
-
         default:
           contenido = '';
           break;
@@ -35,24 +33,25 @@ class _MenuState extends State<Menu> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(255, 42, 54, 68),
+      backgroundColor: const Color.fromARGB(255, 42, 54, 68),
       body: Center(
         child: selectedIndex == 0
             ? const Proveedores()
             : selectedIndex == 1
                 ? const Clientes()
-                    : Container(), // Opción por defecto
+                : Container(), // Opción por defecto
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor:const Color.fromARGB(255, 42, 54, 68),
-        
+        backgroundColor: const Color.fromARGB(255, 42, 54, 68),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              icon: Icon(Icons.local_shipping_outlined), label: 'Proveedores'),
+            icon: Icon(Icons.local_shipping_outlined),
+            label: 'Proveedores',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: 'Clientes'),
-
+            icon: Icon(Icons.person_outline),
+            label: 'Clientes',
+          ),
         ],
         currentIndex: selectedIndex,
         selectedItemColor: Colors.amber.shade300,
@@ -62,3 +61,4 @@ class _MenuState extends State<Menu> {
     );
   }
 }
+
