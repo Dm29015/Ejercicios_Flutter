@@ -39,7 +39,7 @@ class _MenuState extends State<Menu> {
             ? const Proveedores()
             : selectedIndex == 1
                 ? const Clientes()
-                : Container(), // Opción por defecto
+                : Container(), 
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromARGB(255, 42, 54, 68),
