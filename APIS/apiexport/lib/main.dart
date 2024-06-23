@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Export Management',
+      title: 'Exportaciones',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

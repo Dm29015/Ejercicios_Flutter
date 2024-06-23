@@ -1,28 +1,40 @@
 import 'package:flutter/material.dart';
 import '../Controller/ExportController.dart';
 
-
-class Export extends StatefulWidget {
-  final Export? export;
-
-  const Export({super.key, this.export});
+class RegisterExport extends StatefulWidget {
+  const RegisterExport({super.key});
 
   @override
-  _ExportState createState() => _ExportState();
+  _RegisterExportState createState() => _RegisterExportState();
 }
 
-class _ExportState extends State<Export> {
+class _RegisterExportState extends State<RegisterExport> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nombreProductoController =
-      TextEditingController();
-  late final TextEditingController _kgController = TextEditingController();
-  late final TextEditingController _precioDollarController =
-      TextEditingController();
-  late DateTime _fechaRegistro = TextEditingController() as DateTime;
+  final TextEditingController _nombreProductoController = TextEditingController();
+  final TextEditingController _kgController = TextEditingController();
+  final TextEditingController _precioDollarController = TextEditingController();
+  DateTime _fechaRegistro = DateTime.now();
 
   @override
   void initState() {
     super.initState();
+    _fetchDolarValue();
+  }
+
+  Future<void> _fetchDolarValue() async {
+    try {
+      double valor = await valorDolar();
+      setState(() {
+        _precioDollarController.text = valor.toString();
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error al obtener el valor del dólar: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Future<void> _selectDate() async {
@@ -42,20 +54,15 @@ class _ExportState extends State<Export> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(widget.export == null ? 'Add Export' : 'Edit Export'),
+      title: const Text('Registrar exportación'),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              _buildTextField(_nombreProductoController, 'Nombre Producto',
-                  'Please enter the product name'),
-              _buildTextField(
-                  _kgController, 'Kg', 'Please enter the weight in kg',
-                  keyboardType: TextInputType.number),
-              _buildTextField(_precioDollarController, 'Precio Dollar',
-                  'Please enter the price in dollars',
-                  keyboardType: TextInputType.number),
+              _buildTextField(_nombreProductoController, 'Nombre Producto', 'Por favor ingrese el nombre del producto'),
+              _buildTextField(_kgController, 'Kg', 'Por favor ingrese el peso en kilogramos', keyboardType: TextInputType.number),
+              _buildTextField(_precioDollarController, 'Precio Dollar', 'Precio del dólar', keyboardType: TextInputType.number, readOnly: true),
               ListTile(
                 title: Text('Fecha Registro: ${_fechaRegistro.toLocal()}'),
                 trailing: const Icon(Icons.calendar_today),
@@ -67,20 +74,20 @@ class _ExportState extends State<Export> {
       ),
       actions: <Widget>[
         TextButton(
-          child: const Text('Cancel'),
+          child: const Text('Cancelar'),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text(widget.export == null ? 'Add' : 'Save'),
+          child: const Text('Guardar'),
           onPressed: () async {
             if (_formKey.currentState!.validate()) {
               var export = {
-                "nombreProducto": _nombreProductoController.text,
+                "name": _nombreProductoController.text,
                 "kg": _kgController.text,
-                "precioDollar": _precioDollarController.text,
-                "fechaRegistro": _fechaRegistro
+                "priceDollar": _precioDollarController.text,
+                "registrationDate": _fechaRegistro.toIso8601String(),
               };
               try {
                 await createExport(export);
@@ -88,17 +95,19 @@ class _ExportState extends State<Export> {
                   const SnackBar(
                     content: Text('Exportación creada con éxito'),
                     duration: Duration(seconds: 2),
-                    backgroundColor: Colors.green));
+                    backgroundColor: Colors.green,
+                  ),
+                );
+                Navigator.of(context).pop();
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Exportación denegada'),
-                    duration: Duration(seconds: 2),
-                    backgroundColor: Colors.red));
-                throw Exception('Error al crear export');
-                
+                  SnackBar(
+                    content: Text('Error al crear exportación: $e'),
+                    duration: const Duration(seconds: 2),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
-              // Navigator.of(context).pop(export);
             }
           },
         ),
@@ -106,13 +115,12 @@ class _ExportState extends State<Export> {
     );
   }
 
-  TextFormField _buildTextField(
-      TextEditingController controller, String label, String validationMessage,
-      {TextInputType keyboardType = TextInputType.text}) {
+  TextFormField _buildTextField(TextEditingController controller, String label, String validationMessage, {TextInputType keyboardType = TextInputType.text, bool readOnly = false}) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(labelText: label),
       keyboardType: keyboardType,
+      readOnly: readOnly,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return validationMessage;

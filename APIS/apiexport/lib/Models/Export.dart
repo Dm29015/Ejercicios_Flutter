@@ -1,9 +1,8 @@
-
 class Export {
-  final String id;
+  final int id;
   final String nombreProducto;
-  final double kg;
-  final double precioDollar;
+  final String kg;
+  final String precioDollar;
   final DateTime fechaRegistro;
 
   Export({
@@ -18,9 +17,9 @@ class Export {
     return Export(
       id: json['idExport'],
       nombreProducto: json['name'],
-      kg: json['Kg'],
-      precioDollar: json['PriceDollar'],
-      fechaRegistro: json['RegistrationDate'],
+      kg: json['kg'],
+      precioDollar: json['priceDollar'],
+      fechaRegistro: DateTime.parse(json['registrationDate']),
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../Controller/ExportController.dart';
 import '../Models/Export.dart';
+import 'RegisterExport.dart';
+import 'EditExport.dart';
 
 class ExportListPage extends StatefulWidget {
   const ExportListPage({super.key});
@@ -24,16 +26,69 @@ class _ExportListPageState extends State<ExportListPage> {
     });
   }
 
-  Future<void> _deleteExport(String id) async {
-    await deleteExport(id);
-    _refreshExports();
+  Future<void> _deleteExport(BuildContext context, int id) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirmar Eliminación'),
+          content: const Text('¿Estás seguro de que deseas eliminar esta exportación?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Eliminar'),
+              onPressed: () async {
+                try {
+                  await deleteExport(id);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Exportación eliminada con éxito!'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  Navigator.pop(context);
+                  _refreshExports();
+                } catch (e) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Error al eliminar la exportación.'),
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _navigateToEditForm(Export export) async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditExport(export: export);
+      },
+    );
+
+    if (result == true) {
+      _refreshExports();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Exports'),
+        title: const Text('Exportaciones'),
       ),
       body: FutureBuilder<List<Export>>(
         future: _futureExports,
@@ -43,26 +98,26 @@ class _ExportListPageState extends State<ExportListPage> {
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No exports found.'));
+            return const Center(child: Text('No se encontraron exportaciones.'));
           } else {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final export = snapshot.data![index];
                 return ListTile(
-                  title: Text(export.nombreProducto),
+                  title: Text(export.nombreProducto,style: const TextStyle(fontWeight: FontWeight.bold),),
                   subtitle: Text(
-                      'Kg: ${export.kg}, Precio: \$${export.precioDollar}'),
+                      'Fecha: ${export.fechaRegistro} \nPeso: ${export.kg} kilogramos \nDólar: \$${export.precioDollar}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
                         icon: const Icon(Icons.edit),
-                        onPressed: () => {},
+                        onPressed: () => _navigateToEditForm(export),
                       ),
                       IconButton(
                         icon: const Icon(Icons.delete),
-                        onPressed: () => _deleteExport(export.id),
+                        onPressed: () => _deleteExport(context, export.id),
                       ),
                     ],
                   ),
@@ -73,7 +128,12 @@ class _ExportListPageState extends State<ExportListPage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () async {
+          final route =
+              MaterialPageRoute(builder: (context) => const RegisterExport());
+          await Navigator.push(context, route);
+          _refreshExports();
+        },
         child: const Icon(Icons.add),
       ),
     );
